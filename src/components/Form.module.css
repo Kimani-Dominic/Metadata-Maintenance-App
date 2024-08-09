@@ -1,0 +1,11 @@
+.container {
+    padding: 20px;
+}
+
+.row {
+    margin-bottom: 15px;
+}
+
+.title, .surname, .firstname, .email, .newsletters {
+    width: 100%;
+}
