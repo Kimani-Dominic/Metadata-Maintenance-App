@@ -1,4 +1,4 @@
-.container {
+/* .container {
     padding: 20px;
 }
 
@@ -8,4 +8,61 @@
 
 .title, .surname, .firstname, .email, .newsletters {
     width: 100%;
-}
+} */
+
+.form {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  .form h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .form .field {
+    margin-bottom: 15px;
+  }
+  
+  .form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+  }
+ 
+  .form input,
+  .form select,
+  .form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .buttonRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .buttonRow .dhis2-ui-button {
+    margin-left: 10px;
+  }
+  .alert-bar {
+    margin-top: 20px;
+  }
+  
+  .chip {
+    margin-bottom: 20px;
+  }
+  

@@ -91,7 +91,7 @@ const Home = () => {
     };
 
     return (
-        <div className='were'>
+        <div>
             <Sidebar />
             <div className='search'>
             <div className='searching'>
@@ -194,13 +194,8 @@ const Home = () => {
                                 <Link to={`/edit/${dataElement.id}`}>
                                     <IconEdit24 />
                                 </Link>
-                                {/* <Link to={'/delete/${dataElement.id}'}> */}
-                                {/* <DeleteElement id={dataElement.id} refetch={refetch}> */}
                                     <IconDelete24 end/>
                                     <DeleteElement id={dataElement.id} refetch={refetch}/>
-                                   
-                                {/* </DeleteElement> */}
-                                {/* </Link> */}
                             </DataTableCell>
                         </DataTableRow>
                     ))}

@@ -95,6 +95,14 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
         navigate('/')
     }
 
+    if (error) {
+        return (
+            <AlertBar permanent warning className={styles.alertBar}>
+                Warning: {error.message}
+            </AlertBar>
+        )
+    }
+
      const alert = () => {
          return (
              <AlertBar permanent warning
@@ -102,7 +110,7 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
              />
          )
      }
-
+     
     return (
         <ReactFinalForm 
         // onSuccess={create}
@@ -114,11 +122,6 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                     <Chip icon={<IconArrowLeft24 />} onClick={NavigateBack}>
                     Back to homepage
                     </Chip>
-
-                    {/* <TextAreaField 
-                    name="textareaName" 
-                    onClick={'Name *'}
-                    placeholder="Hold the place" /> */}
                     <h2>Basic information</h2>
 
                     <Field
@@ -153,11 +156,11 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                         label="url"
                         component={InputFieldFF}
                     />
-                    <Field
+                    {/* <Field
                         name="color and icon"
                         label="color and icon"
                         component={IconColor24}
-                    />
+                    /> */}
                    <Field
                         name="Field Mask"
                         label="field mask"
@@ -170,13 +173,12 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                     <Field
                         name="domainType"
                         label="Domain Type"
-                        component={RadioFieldFF}
+                        component={SingleSelectFieldFF}
                         options={[
                             { label: 'Aggregate', value: 'AGGREGATE' },
                             { label: 'Tracker', value: 'TRACKER' },
                         ]}
                     />
-                    
                     <Field
                         name="valueType"
                         label="Value Type"
@@ -198,7 +200,7 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                             { label: 'Integer', value: 'INTEGER' },
                             { label: 'Positive Integer', value: 'POSITIVE_INTEGER' },
                             { label: 'Negative Integer', value: 'NEGATIVE_INTEGER' },
-                            { label: 'Positive or Zero Integer', value: 'POSITIVE_OR_ZERO_INTEGER' },
+                            { label: 'Positive or Zero Integer', value: 'INTEGER_ZERO_OR_POSITIVE' },
                             { label: 'Tracker Associate', value: 'TRACKER_ASSOCIATE' },
                             { label: 'Username', value: 'USERNAME' },
                             { label: 'Coordinate', value: 'COORDINATE' },
@@ -276,17 +278,18 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                     />
 
                     <div className={styles.buttonRow}>
-                        <Button type="submit" primary  disabled={submitting}>
-		    {submitting ? <CircularLoader small /> : 'Submit'}
+                        <Button type="submit" primary disabled={submitting}>
+                            {submitting ? <CircularLoader small /> : 'Submit'}
                         </Button>
-    
+
                         <Button
-                        ariaLabel='Button'
-                        name='Basic button'
-                        onlogger={<AlertBar permanent warning critical />}
-                        title='Button'
-                        value='default'>
-                            Cancel!{(alert)}
+                            ariaLabel='Button'
+                            name='Basic button'
+                            onClick={alert}
+                            title='Button'
+                            value='default'
+                        >
+                            Cancel
                         </Button>
                     </div>
                 </form>

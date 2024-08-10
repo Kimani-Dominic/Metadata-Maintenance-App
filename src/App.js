@@ -6,17 +6,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EditElement from './components/EditElement';
 import Sidebar from './components/Sidebar';
 import DeleteElement from './components/DeleteElement';
-// import { MenuItem, Menu } from '@dhis2/ui';
 import './App.module.css';
+import GroupForm from './dataElementGroup/GroupForm';
+import EditElementGroup from './dataElementGroup/EditGroup';
+import Overview from './dataElementGroup/GroupHome';
 
 
 const MyApp = () => (
-    // <div className={classes.container}>
         <Router>
              <div className='app-container'>
             {/* <Sidebar /> */}
             <div className='main-content'>
-            {/* // style={{ marginLeft: '200px', padding: '', width: '100%' }} */}
             </div>
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -24,7 +24,17 @@ const MyApp = () => (
                     <Route path="/add/new" element={<Form />} />
                     <Route path="/edit/:id" element={<EditElement />} />
                     <Route path="/delete/:id" element={<DeleteElement />} />
+
+                    {/* data elements Group paths */}
+                    <Route path="/data-elements/groups" element={<Overview />} />
+                    <Route path="/add/newGroup" element={<GroupForm />} />
+                    <Route path="/edit/:id" element={<EditElementGroup />} />
+
+
                     {/* <Route path='/*' element={<ErrorPage />} /> */}
+                    <Route path="/overview" element={<Home />} />
+                    <Route path="/data-elements/overview" element={<Home />} />
+                    <Route path="/data-elements/group-sets" element={<Overview />} />
                 </Routes>    
                 </div>      
         </Router>
