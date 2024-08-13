@@ -142,11 +142,12 @@ const Overview = () => {
                                 <DataTableCell>{dataElementGroup.displayName}</DataTableCell>
                                 <DataTableCell>{dataElementGroup.lastUpdated}</DataTableCell>
                                 <DataTableCell>
-                                    <Link to={`/edit/${dataElementGroup.id}`}>
+                                    <Link to={`/editGroup/${dataElementGroup.id}`}>
                                         <IconEdit24 />
                                     </Link>
-                                    {/* <IconDelete24 end />
-                                    <DeleteElement id={dataElementGroup.id} refetch={refetch} /> */}
+                                    
+                                    <IconDelete24 end />
+                                    <dataElementGroup id={dataElementGroup.id} refetch={refetch} />
                                 </DataTableCell>
                             </DataTableRow>
                         ))}
