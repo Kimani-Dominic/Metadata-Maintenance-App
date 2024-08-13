@@ -285,7 +285,7 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                         <Button
                             ariaLabel='Button'
                             name='Basic button'
-                            onClick={alert}
+                            onClick={NavigateBack}
                             title='Button'
                             value='default'
                         >
