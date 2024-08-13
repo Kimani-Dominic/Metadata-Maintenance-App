@@ -122,7 +122,6 @@ const GroupForm = ({ dataElementGroupId, onSuccess, initialValues }) => {
                         }))}
                         multiple
                     />
-
                     <div className={styles.buttonRow}>
                         <Button type="submit" primary disabled={submitting}>
                             {submitting ? <CircularLoader small /> : 'Submit'}
