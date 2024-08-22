@@ -17,8 +17,17 @@ import {
     CenteredContent,
     InputField,
     CircularLoader,
+    Button,
+    IconMore24,
+    Popper,
+    MenuItem,
+    Menu,
+    IconDuplicate24,
+    IconShare24,
+    // IconSh
+    
 } from '@dhis2/ui';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import './components/sidebar.css';
 
@@ -43,6 +52,16 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortField, setSortField] = useState('displayName');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [dataElementSearch, setDataElementSearch] = useState('');
+    const [domainTypeSearch, setDomainTypeSearch] = useState('');
+    const [valueTypeSearch, setValueTypeSearch] = useState('');
+    const [dataSetSearch, setDataSetSearch] = useState('');
+    const [categoryComboSearch, setCategoryComboSearch] = useState('');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const navigate = useNavigate();
+    
+
     const { loading, error, data, refetch } = useDataQuery(myQuery, {
         variables: { page, sortField, sortDirection, searchQuery },
     });
@@ -84,44 +103,58 @@ const Home = () => {
         refetch({ sortField: field, sortDirection: newSortDirection, searchQuery });
     };
 
-    const handleSearch = (event) => {
-        setSearchQuery(event.value);
-        setPage(1);
-        refetch({ page: 1, searchQuery: event.value, sortField, sortDirection });
+    // const handleSearch = (event) => {
+    //     setSearchQuery(event.value);
+    //     setPage(1);
+    //     refetch({ page: 1, searchQuery: event.value, sortField, sortDirection });
+    // };
+    const handleInputChange = (setter) => (e) => {
+        setter(e.target.value);
     };
+
+    const handleDelete = async () => {
+        try {
+            await mutate({ id })
+            alert('Data Element deleted successfully!')
+            refetch()
+        } catch (err) {
+            console.error('Error deleting data element:', err)
+        }
+    }
 
     return (
         <div>
             <Sidebar />
             <div className='search'>
             <div className='searching'>
-            <InputField
-                value={searchQuery}
-                onChange={handleSearch}
+             <InputField
+                value={dataElementSearch}
+                onChange={handleInputChange(setDataElementSearch)}
+                // onChange={(e) => setDataElementSearch(e.target.value)}
                 type="search"
                 placeholder="Search data elements"
             />
             <InputField
-                value={searchQuery}
-                onChange={handleSearch}
+                value={domainTypeSearch}
+                onChange={(e) => setDomainTypeSearch(e.target.value)}
                 type="search"
                 placeholder="Domain Type"
             />
             <InputField
-                value={searchQuery}
-                onChange={handleSearch}
+                value={valueTypeSearch}
+                onChange={(e) => setValueTypeSearch(e.target.value)}
                 type="search"
                 placeholder="Value Type"
             />
             <InputField
-                value={searchQuery}
-                onChange={handleSearch}
+                value={dataSetSearch}
+                onChange={(e) => setDataElementSearch(e.target.value)}
                 type="search"
                 placeholder="Data Set"
             />
             <InputField
-                value={searchQuery}
-                onChange={handleSearch}
+                value={categoryComboSearch}
+                onChange={(e) => setCategoryComboSearch(e.target.value)}
                 type="search"
                 placeholder="Category combo"
             />
@@ -191,11 +224,64 @@ const Home = () => {
                             <DataTableCell>{dataElement.categoryCombo.name}</DataTableCell>
                             <DataTableCell>{dataElement.lastUpdated}</DataTableCell>
                             <DataTableCell>
-                                <Link to={`/edit/${dataElement.id}`}>
+                                {/* <Link to={`/edit/${dataElement.id}`}>
                                     <IconEdit24 />
-                                </Link>
-                                    <IconDelete24 end/>
-                                    <DeleteElement id={dataElement.id} refetch={refetch}/>
+                                </Link> */}
+                                    {/* <IconMore24 /> */}
+                                     {/* <DeleteElement id={dataElement.id} refetch={refetch} />  */}
+                                    {/* <div>
+                                        <Button onClick={handleDelete} disabled={loading}>
+                                            <IconMore24 />
+                                        </Button>
+                                        {error && (
+                                            <AlertBar permanent critical>
+                                                Error: {error.message}
+                                            </AlertBar>
+                                        )}
+                                    </div> */}
+
+                                    <div>
+                                    <Button icon={<IconMore24 />} onClick={toggleMenu} />
+                                    {isMenuOpen && (
+                                        <Popper placement="bottom-start" onClickOutside={() => setIsMenuOpen(false)}>
+                                            <Menu>
+                                                <MenuItem
+                                                        icon={<IconEdit24 />}
+                                                        label="Edit"
+                                                        onClick={() => navigate(`/edit/${dataElement.id}`)}
+                                                        
+
+                                                    />
+                                                <MenuItem
+                                                    icon={<IconDuplicate24 />}
+                                                    label="Clone"
+                                                    onClick={() => alert('Do you want to copy the Element API path?')}
+                                                />
+                                                
+                                                <MenuItem
+                                                    icon={<IconShare24 />}
+                                                    label="Sharing Settings"
+                                                    onClick={() => alert('Sharing action triggered')}
+                                                />
+                                                <MenuItem
+                                                    icon={<DeleteElement />}
+                                                    label="Delete"
+                                                    // onClick={() => <handleDelete />}
+
+                                                />
+                                                <MenuItem
+                                                    // icon={<IconDetails24 />}
+                                                    label="Show details"
+                                                    onClick={() => alert('Show Data Element details')}
+                                                />
+                                            </Menu>
+
+
+                                        </Popper>
+                                    )}
+                                            </div>
+                                                                
+                        
                             </DataTableCell>
                         </DataTableRow>
                     ))}
