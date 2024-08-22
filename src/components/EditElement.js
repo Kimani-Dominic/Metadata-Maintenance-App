@@ -1,8 +1,8 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import { useDataQuery } from '@dhis2/app-runtime'
-import Form from './Form'
-import { CircularLoader, CenteredContent, NoticeBox } from '@dhis2/ui'
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useDataQuery } from '@dhis2/app-runtime';
+import Form from './Form';
+import { CircularLoader, CenteredContent, NoticeBox } from '@dhis2/ui';
 
 const query = {
     dataElement: {

@@ -3,9 +3,7 @@ import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
 import {
     InputFieldFF,
     SingleSelectFieldFF,
-    CheckboxFieldFF,
     Button,
-    composeValidators,
     hasValue,
     number,
     CenteredContent,
@@ -14,8 +12,8 @@ import {
     // TextAreaField,
     Chip,
     AlertBar,
-    IconColor24,
     InputField,
+    CheckboxFieldFF,
     RadioFieldFF
 } from '@dhis2/ui';
 import { Form as ReactFinalForm, Field } from 'react-final-form';
@@ -74,6 +72,19 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
             console.error('Error updating data element:', err)
     }
     };
+
+    // const submitAlert = () => {
+    //     if (submitting) {
+    //         return(
+    //             <AlertBar
+    //             label="Data Elements saved successfuly">
+                    
+    //             </AlertBar>
+    //         )
+    //     }
+    // }
+
+
     if (loading) {
         return (
 		<CenteredContent>
@@ -276,6 +287,14 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                         label="Zero Is Significant"
                         component={CheckboxFieldFF}
                     />
+                    {/* <Checkbox
+                        name="zeroIsSignificant"
+                        label="Zero Is Significant"
+                        // checked={selected.includes(dataElement.id)}
+                        // onChange={() => toggleSelected(dataElement.id)}
+                        // value={zeroIsSignificant}
+
+                    /> */}
 
                     <div className={styles.buttonRow}>
                         <Button type="submit" primary disabled={submitting}>
