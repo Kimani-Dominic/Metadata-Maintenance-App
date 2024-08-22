@@ -16,11 +16,19 @@ import {
     CenteredContent,
     InputField,
     CircularLoader,
+    Button,
+    IconMore24,
+    Popper,
+    MenuItem,
+    Menu,
+    IconDuplicate24,
+    IconShare24,
 } from '@dhis2/ui';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import '../components/sidebar.css';
 import NewElementGroup from './NewGroup';
+import DeleteElementGroup from './DeleteGroup';
 
 let pageSize = 10;
 
@@ -42,6 +50,9 @@ const Overview = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortField, setSortField] = useState('displayName');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const navigate = useNavigate();
     const { loading, error, data, refetch } = useDataQuery(myQuery, {
         variables: { page, sortField, sortDirection, searchQuery },
     });
@@ -142,12 +153,44 @@ const Overview = () => {
                                 <DataTableCell>{dataElementGroup.displayName}</DataTableCell>
                                 <DataTableCell>{dataElementGroup.lastUpdated}</DataTableCell>
                                 <DataTableCell>
-                                    <Link to={`/editGroup/${dataElementGroup.id}`}>
-                                        <IconEdit24 />
-                                    </Link>
-                                    
-                                    <IconDelete24 end />
-                                    <dataElementGroup id={dataElementGroup.id} refetch={refetch} />
+                                <div>
+                                    <Button icon={<IconMore24 />} onClick={toggleMenu} />
+                                    {isMenuOpen && (
+                                        <Popper placement="bottom-start" onClickOutside={() => setIsMenuOpen(false)}>
+                                            <Menu>
+                                                <MenuItem
+                                                        icon={<IconEdit24 />}
+                                                        label="Edit"
+                                                        onClick={() => navigate(`/edit/${dataElementGroup.id}`)}
+                                                    />
+                                                <MenuItem
+                                                    icon={<IconDuplicate24 />}
+                                                    label="Clone"
+                                                    onClick={() => alert('Copy Element API action triggered')}
+                                                />
+                                                
+                                                <MenuItem
+                                                    icon={<IconShare24 />}
+                                                    label="Sharing Settings"
+                                                    onClick={() => alert('Sharing action triggered')}
+                                                />
+                                                <MenuItem
+                                                    icon={<IconDelete24 />}
+                                                    label="Delete"
+                                                    onClick={() => <DeleteElementGroup />}
+                                                />
+                                                <MenuItem
+                                                    // icon={<IconDetails24 />}
+                                                    label="Show details"
+                                                    onClick={() => alert('Show Data Element details')}
+                                                />
+                                            </Menu>
+
+
+                                        </Popper>
+                                    )}
+                                            </div>
+                                                    
                                 </DataTableCell>
                             </DataTableRow>
                         ))}

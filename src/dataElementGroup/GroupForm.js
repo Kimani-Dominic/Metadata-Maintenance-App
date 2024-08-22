@@ -1,16 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDataMutation, useDataQuery } from '@dhis2/app-runtime';
-import {
-    InputFieldFF,
-    SingleSelectFieldFF,
-    Button,
-    hasValue,
-    CenteredContent,
-    CircularLoader,
-    Chip,
-    AlertBar,
-    IconArrowLeft24,
-} from '@dhis2/ui';
+import { Button, InputFieldFF, CircularLoader, AlertBar, Chip, IconArrowLeft24, hasValue, Transfer, HeaderBar } from '@dhis2/ui';
 import { Form as ReactFinalForm, Field } from 'react-final-form';
 import styles from '../components/Form.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -19,14 +9,14 @@ const createMutation = {
     resource: 'dataElementGroups',
     type: 'create',
     data: ({ values }) => values,
-};
+}
 
 const updateMutation = {
     resource: 'dataElementGroups',
     type: 'update',
     id: ({ id }) => id,
     data: ({ values }) => values,
-};
+}
 
 const query = {
     dataElements: {
@@ -38,103 +28,107 @@ const query = {
     },
 };
 
-const GroupForm = ({ dataElementGroupId, onSuccess, initialValues }) => {
-    const { loading, error, data } = useDataQuery(query);
-    const navigate = useNavigate();
+const GroupForm = ({ dataElementGroupId, onSuccess, initialValues, onSuccessMessage, onErrorMessage }) => {
     const mutation = dataElementGroupId ? updateMutation : createMutation;
-    const [mutate] = useDataMutation(mutation);
+    const { error, data, loading } = useDataQuery(query); 
+    const navigate = useNavigate();
+    const [mutate, { loading: mutateLoading }] = useDataMutation(mutation);
+    const [alertMessage, setAlertMessage] = useState(null);
 
     const handleSubmit = async (values) => {
         try {
-            const { id, ...rest } = values;
-            await mutate({ id: dataElementGroupId, values: rest });
-            alert('Data element group saved successfully!');
+            await mutate({ id: dataElementGroupId, values });
+            setAlertMessage({ type: 'success', message: 'Data element group saved successfully!' });
             onSuccess();
+            onSuccessMessage();
         } catch (err) {
-            console.error('Error updating data element group:', err);
+            setAlertMessage({ type: 'error', message: `Error updating data element group: ${err.message}` });
+            onErrorMessage();
         }
     };
-
-    if (loading) {
-        return (
-            <CenteredContent>
-                <CircularLoader aria-label="Large Loader" large />
-            </CenteredContent>
-        );
-    }
-
-    if (error) {
-        return (
-            <AlertBar permanent warning className={styles.alertBar}>
-                Warning: {error.message}
-            </AlertBar>
-        );
-    }
 
     const NavigateBack = () => {
         navigate('/data-elements/groups');
     };
 
+    const transferOptions = data?.dataElements?.dataElements.map(de => ({
+        label: de.displayName,
+        value: de.id,   
+    })) || [];
+    
+    const [selected, setSelected] = useState([]);
+    const onChange = ({ selected }) => {
+        setSelected(selected);
+    };
+
     return (
-        <ReactFinalForm 
-            onSubmit={handleSubmit}
-            initialValues={initialValues}>
-            {({ handleSubmit, submitting }) => (
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <Chip icon={<IconArrowLeft24 />} onClick={NavigateBack}>
-                        Back to homepage
-                    </Chip>
-                    <h2>Data Element Group Information</h2>
-
-                    <Field
-                        name="name"
-                        label="Name"
-                        component={InputFieldFF}
-                        validate={hasValue}
-                    />
-
-                    <Field
-                        name="shortName"
-                        label="Short Name"
-                        component={InputFieldFF}
-                        validate={hasValue}
-                    />
-
-                    <Field
-                        name="code"
-                        label="Code"
-                        component={InputFieldFF}
-                    />
-
-                    <Field
-                        name="description"
-                        label="Description"
-                        component={InputFieldFF}
-                    />
-
-                    <Field
-                        name="dataElements"
-                        label="Data Elements"
-                        component={SingleSelectFieldFF}
-                        options={data.dataElements.dataElements.map((de) => ({
-                            label: de.displayName,
-                            value: de.id,
-                        }))}
-                        multiple
-                    />
-                    <div className={styles.buttonRow}>
-                        <Button type="submit" primary disabled={submitting}>
-                            {submitting ? <CircularLoader small /> : 'Submit'}
-                        </Button>
-
-                        <Button onClick={NavigateBack}>
-                            Cancel
-                        </Button>
-                    </div>
-                </form>
+        <>
+            {alertMessage && (
+                <AlertBar
+                    duration={3000}
+                    critical={alertMessage.type === 'error'}
+                    success={alertMessage.type === 'success'}
+                >
+                    {alertMessage.message}
+                </AlertBar>
             )}
-        </ReactFinalForm>
+            <ReactFinalForm 
+                onSubmit={handleSubmit}
+                initialValues={initialValues}
+            >
+                {({ handleSubmit, submitting }) => (
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <Chip icon={<IconArrowLeft24 />} onClick={NavigateBack}>
+                            Back to homepage
+                        </Chip>
+                        <h2>Data Element Group Information</h2>
+
+                        <Field
+                            name="name"
+                            label="Name"
+                            component={InputFieldFF}
+                            validate={hasValue}
+                        />
+
+                        <Field
+                            name="shortName"
+                            label="Short Name"
+                            component={InputFieldFF}
+                            validate={hasValue}
+                        />
+
+                        <Field
+                            name="code"
+                            label="Code"
+                            component={InputFieldFF}
+                        />
+
+                        <Field
+                            name="description"
+                            label="Description"
+                            component={InputFieldFF}
+                        />
+                        <p>Data Elements</p>
+                        {loading ? (
+                            <CircularLoader />
+                        ) : (
+                            <Transfer
+                                options={transferOptions}
+                                selected={selected}
+                                onChange={onChange}
+                            />
+                        )}
+                        
+                        <div className={styles.buttonRow}>
+                            <Button type="submit" primary disabled={submitting || mutateLoading}>
+                                {submitting || mutateLoading ? <CircularLoader small /> : 'Submit'}
+                            </Button>
+                        </div>
+                    </form>
+                )}
+            </ReactFinalForm>
+        </>
     );
-};
+}
 
 export default GroupForm;
