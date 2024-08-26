@@ -24,14 +24,14 @@ import {
     Menu,
     IconDuplicate24,
     IconShare24,
-    // IconSh
-    
+    // Select,   
+    // Option
 } from '@dhis2/ui';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+// import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import './components/sidebar.css';
 
-let pageSize = 10;
+let pageSize = 20;
 
 const myQuery = {
     results: {
@@ -47,7 +47,9 @@ const myQuery = {
 };
 
 const Home = () => {
+    // const [page, setPage] = useState(1);
     const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [selected, setSelected] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [sortField, setSortField] = useState('displayName');
@@ -59,7 +61,8 @@ const Home = () => {
     const [categoryComboSearch, setCategoryComboSearch] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    const onChange = DeleteElement;
     
 
     const { loading, error, data, refetch } = useDataQuery(myQuery, {
@@ -122,8 +125,15 @@ const Home = () => {
         }
     }
 
+    // const handlePageSizeChange = (event) => {
+    //     const newPageSize = parseInt(event.selected);
+    //     setPageSize(newPageSize);
+    //     setPage(1); // Reset to first page
+    //     refetch({ page: 1, pageSize: newPageSize, sortField, sortDirection, searchQuery });
+    // };
+
     return (
-        <div>
+        <div className='main-content'>
             <Sidebar />
             <div className='search'>
             <div className='searching'>
@@ -264,10 +274,7 @@ const Home = () => {
                                                     onClick={() => alert('Sharing action triggered')}
                                                 />
                                                 <MenuItem
-                                                    icon={<DeleteElement />}
-                                                    label="Delete"
-                                                    // onClick={() => <handleDelete />}
-
+                                                    icon={<DeleteElement dataElementId={dataElement.id} onDelete={onChange} />}
                                                 />
                                                 <MenuItem
                                                     // icon={<IconDetails24 />}
