@@ -1,64 +1,60 @@
-import React from 'react'
-import classes from './App.module.css'
+import React, { useState } from 'react';
+import classes from './App.module.css';
 import Form from './components/Form';
 import Home from './Home';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EditElement from './components/EditElement';
 import Sidebar from './components/Sidebar';
 import DeleteElement from './components/DeleteElement';
-import './App.module.css';
 import GroupForm from './dataElementGroup/GroupForm';
 import EditElementGroup from './dataElementGroup/EditGroup';
 import Overview from './dataElementGroup/GroupHome';
+import Indicator from './Indicators/indicator';
+import './components/sidebar.css';
 
+const MyApp = () => {
+    const [selectedMenuItem, setSelectedMenuItem] = useState('/');
 
-const MyApp = () => (
-        <Router>
-             <div className='app-container'>
-            {/* <Sidebar /> */}
+    const handleMenuItemClick = (path) => {
+        setSelectedMenuItem(path);
+    };
+
+    const renderComponent = () => {
+        switch (selectedMenuItem) {
+            case '/metadata-overview':
+                return <Home />;
+            case '/categories':
+                return <Categories />;
+            case '/data-elements':
+                return <Home />;
+            case '/overview':
+                return <Overview />;
+            case '/data-elements/groups':
+                return <Overview />;
+            case '/data-element-group-set':
+                return <GroupSet />;
+            case '/data-sets':
+                return <DataSets />;
+            case '/indicators':
+                return <Indicator />;
+            case '/organisation-units':
+                return <OrganisationUnits />;
+            case '/programs-and-tracker':
+                return <ProgramsAndTracker />;
+            case '/validations':
+                return <Validations />;
+            default:
+                return <Home />;
+        }
+    };
+
+    return (
+        <div className='app-container'>
+            <Sidebar onMenuItemClick={handleMenuItemClick} />
             <div className='main-content'>
+                {renderComponent()}
             </div>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/data-elements" element={<Home />} />
-                    <Route path="/add/new" element={<Form />} />
-                    <Route path="/edit/:id" element={<EditElement />} />
-                    <Route path="/delete/:id" element={<DeleteElement />} />
+        </div>
+    );
+};
 
-                    {/* data elements Group paths */}
-                    <Route path="/data-elements/groups" element={<Overview />} />
-                    <Route path="/add/newGroup" element={<GroupForm />} />
-                    <Route path="/edit/:id" element={<EditElementGroup />} />
-
-
-                    {/* <Route path='/*' element={<ErrorPage />} /> */}
-                    <Route path="/overview" element={<Home />} />
-                    <Route path="/data-elements/overview" element={<Home />} />
-                    <Route path="/data-elements/group-sets" element={<Overview />} />
-                </Routes>    
-                </div>      
-        </Router>
-    // </div>
-)
-
-export default MyApp
-
-
-
-
-
-
-// <DataQuery query={query}>
-//             {({ error, loading, data }) => {
-//                 if (error) return <span>ERROR</span>
-//                 if (loading) return <span>...</span>
-//                 return (
-//                     <>
-//                         <h1>
-//                             {i18n.t('Hello {{name}}', { name: data.me.name })}
-//                         </h1>
-//                         <h3>{i18n.t('Welcome to DHIS2!')}</h3>
-//                     </>
-//                 )
-//             }}
-//         </DataQuery>
+export default MyApp;
