@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { InputField } from '@dhis2/ui';
 import './sidebar.css';
 
 const Sidebar = () => {
@@ -10,6 +11,9 @@ const Sidebar = () => {
     return (
         <div className='sidebar'>
             <ul>
+                       <InputField
+                        type="search"
+                        placeholder="Search data elements" />
                 <li onClick={() => onMenuItemClick('/')} className='menu-item'>
                   Metadata  Overview
                 </li>
