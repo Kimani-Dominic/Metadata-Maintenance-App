@@ -18,7 +18,7 @@ import {
 } from '@dhis2/ui';
 import { Form as ReactFinalForm, Field } from 'react-final-form';
 import styles from './Form.module.css';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 
 
@@ -50,11 +50,11 @@ const query = {
     },
 };
 
-const Form = ({ dataElementId, onSuccess, initialValues }) => {
+const Form = ({ dataElementId, onSuccess, onCancel, initialValues }) => {
     const { loading, error, data } = useDataQuery(query)
     // const [create] = useDataMutation(createMutation)
     // const [update] = useDataMutation(updateMutation)
-    const navigate = useNavigate()
+    // const navigate = navigate()
     // const alert = onClick()
     const mutation = dataElementId ? updateMutation : createMutation
     const [mutate] = useDataMutation(mutation)
@@ -87,10 +87,10 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
 
     if (loading) {
         return (
-		<CenteredContent>
-		<CircularLoader  aria-label="Large Loader" large />
-		</CenteredContent>
-	)
+            <CenteredContent>
+                <CircularLoader  aria-label="Large Loader" large />
+            </CenteredContent>
+        );
     }
 
     if (error) {
@@ -98,29 +98,29 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
             <AlertBar permanent warning > 
                 Warning{error}
             </AlertBar>
-        )
+        );
     }
    
 
-    const NavigateBack = () => {
-        navigate('/')
-    }
+    // const NavigateBack = () => {
+    //     navigate('/add/new')
+    // }
 
-    if (error) {
-        return (
-            <AlertBar permanent warning className={styles.alertBar}>
-                Warning: {error.message}
-            </AlertBar>
-        )
-    }
+    // if (error) {
+    //     return (
+    //         <AlertBar permanent warning className={styles.alertBar}>
+    //             Warning: {error.message}
+    //         </AlertBar>
+    //     )
+    // }
 
-     const alert = () => {
-         return (
-             <AlertBar permanent warning
-             onClick={NavigateBack}
-             />
-         )
-     }
+    //  const alert = () => {
+    //      return (
+    //          <AlertBar permanent warning
+    //          onClick={NavigateBack}
+    //          />
+    //      )
+    //  }
      
     return (
         <ReactFinalForm 
@@ -130,7 +130,7 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
 	    initialValues={initialValues}>
             {({ handleSubmit, submitting }) => (
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <Chip icon={<IconArrowLeft24 />} onClick={NavigateBack}>
+                    <Chip icon={<IconArrowLeft24 />} onClick={onCancel}>
                     Back to homepage
                     </Chip>
                     <h2>Basic information</h2>
@@ -304,7 +304,7 @@ const Form = ({ dataElementId, onSuccess, initialValues }) => {
                         <Button
                             ariaLabel='Button'
                             name='Basic button'
-                            onClick={NavigateBack}
+                            onClick={onCancel}
                             title='Button'
                             value='default'
                         >
