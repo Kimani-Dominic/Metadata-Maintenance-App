@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import NewElement from './components/NewElement';
 import DeleteElement from './components/DeleteElement';
 import {
     DataTable,
@@ -105,12 +104,12 @@ const Home = () => {
     };
 
     const handleAddNew = () => {
-        setSelectedDataElementId(null); // No ID, since we're creating a new element
+        setSelectedDataElementId(null); 
         setCurrentView('form');
     };
 
     const handleEdit = (id) => {
-        setSelectedDataElementId(id); // Set the ID of the element to edit
+        setSelectedDataElementId(id);
         setCurrentView('form');
     };
 
