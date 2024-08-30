@@ -5,17 +5,14 @@ import {
     SingleSelectFieldFF,
     Button,
     hasValue,
-    number,
     CenteredContent,
     CircularLoader,
     IconArrowLeft24,
-    // TextAreaField,
+    TextAreaField,
     Chip,
     AlertBar,
     InputField,
-    CheckboxFieldFF,
-    RadioFieldFF
-} from '@dhis2/ui';
+    CheckboxFieldFF} from '@dhis2/ui';
 import { Form as ReactFinalForm, Field } from 'react-final-form';
 import styles from './Form.module.css';
 // import { useNavigate } from 'react-router-dom';
@@ -72,6 +69,7 @@ const Form = ({ dataElementId, onSuccess, onCancel, initialValues }) => {
             console.error('Error updating data element:', err)
     }
     };
+    
 
     // const submitAlert = () => {
     //     if (submitting) {
@@ -124,10 +122,8 @@ const Form = ({ dataElementId, onSuccess, onCancel, initialValues }) => {
      
     return (
         <ReactFinalForm 
-        // onSuccess={create}
 	    onSubmit = {handleSubmit}
-
-	    initialValues={initialValues}>
+	    initialValues={initialValues || {}}>
             {({ handleSubmit, submitting }) => (
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <Chip icon={<IconArrowLeft24 />} onClick={onCancel}>
