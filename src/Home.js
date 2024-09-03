@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
-import DeleteElement from './components/DeleteElement';
 import {
     DataTable,
     TableHead,
@@ -18,17 +17,21 @@ import {
     CircularLoader,
     Button,
     IconMore24,
+    IconMore16,
     Popper,
     MenuItem,
     Menu,
     IconDuplicate24,
-    IconShare24,
     IconAdd24,
+    IconShare24, 
+    // IconDetails24 
 } from '@dhis2/ui';
 import Sidebar from './components/Sidebar';
 import './components/sidebar.css';
 import EditElement from './components/EditElement';
 import Form from './components/Form';
+import DeleteElement from './components/DeleteElement';
+import CloneElement from './components/cloneElement';
 
 const pageSize = 10;
 
@@ -44,7 +47,7 @@ const myQuery = {
     },
 };
 
-const Home = () => {
+export const Home = ({ dataElement, onEdit, onShareSettings, onDelete, onShowDetails, onClone}) => {
     const [page, setPage] = useState(1);
     const [selected, setSelected] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -57,6 +60,9 @@ const Home = () => {
     const [sortDirection, setSortDirection] = useState('asc');
     const [currentView, setCurrentView] = useState('list');
     const [selectedDataElementId, setSelectedDataElementId] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const { loading, error, data, refetch } = useDataQuery(myQuery, {
         variables: { page, sortField, sortDirection, searchQuery },
@@ -110,7 +116,8 @@ const Home = () => {
 
     const handleEdit = (id) => {
         setSelectedDataElementId(id);
-        setCurrentView('form');
+        console.log('Editing Data Element ID:', id);
+        setCurrentView('edit');
     };
 
     const handleSuccess = () => {
@@ -121,6 +128,10 @@ const Home = () => {
         setCurrentView('list');
     };
 
+        
+    const toggleMenu = () => {
+        setIsMenuOpen((prev) => !prev);
+    };
     return (
         <>
             <Sidebar />
@@ -228,8 +239,76 @@ const Home = () => {
                                         <DataTableCell>{dataElement.lastUpdated}</DataTableCell>
                                         <DataTableCell>
                                             <div style={{ display: 'flex', gap: '2px' }}>
-                                                <Button icon={<IconEdit24 />} onClick={() => handleEdit(dataElement.id)} />
-                                                <Button icon={<IconMore24 />} />
+                                                <Button icon={<IconEdit24 />} onClick={() => handleEdit(dataElement.id)} />            
+                                                {/* <Button icon={<IconMore24 />} onClick={toggleMenu} /> */}
+                                                
+                                                 <div style={{ position: 'padding-left' }}>
+                                        <Button icon={<IconMore24 />} onClick={toggleMenu} />
+                                        {isMenuOpen && (
+                                            <Popper placement="bottom-start" onClickOutside={() => setIsMenuOpen(false)}>
+                                                <Menu>
+                                                    <MenuItem
+                                                        icon={<IconEdit24 />}
+                                                        label="Edit"
+                                                        onClick={() => handleEdit(dataElement.id)}
+                                                    />
+                                                    <CloneElement
+                                                        dataElementId={dataElement.id}
+                                                        onCloneComplete={() => {
+                                                            console.log('Clone completed');
+                                                        }}
+                                                    />
+                                                    <MenuItem
+                                                        icon={<IconShare24 />}
+                                                        label="Sharing Settings"
+                                                        onClick={onShareSettings} 
+                                                    />
+{/*                                                    
+                                                   <MenuItem
+                                                        icon={<IconDelete24 />}
+                                                        label="Delete"
+                                                        onClick={() => {
+                                                            const handleDelete = DeleteElement({
+                                                                dataElementId: dataElement.id,
+                                                                onDelete: () => {
+                                                                    console.log(`Deleted element with id: ${dataElement.id}`);
+                                                                    // Additional logic after deletion
+                                                                },
+                                                            });
+                                                            handleDelete();
+                                                        }}
+                                                    /> */}
+                                                    <DeleteElement
+                                                        dataElementId={dataElement.id}
+                                                        onClick={() => {
+                                                            console.log(`Deleted element with id: ${dataElement.id}`);
+                                                            // Additional logic after deletion
+                                                        }}
+                                                    />
+                                                    {/* <MenuItem
+                                                        icon={<IconDelete24 />}
+                                                        label="Delete"
+                                                        onClick={() => {
+                                                            <DeleteElement
+                                                                dataElementId={dataElement.id}
+                                                                onDelete={() => {
+                                                                    console.log(`Deleted element with id: ${dataElement.id}`);
+                                                                    // Additional logic after deletion
+                                                                }}
+                                                            />
+                                                        }}
+                                                    /> */}
+
+
+                                                    <MenuItem
+                                                        icon={<IconMore16 />}
+                                                        label="Show details"
+                                                        onClick={onShowDetails} 
+                                                    />
+                                                </Menu>
+                                            </Popper>
+                                        )}
+                                    </div>
                                             </div>
                                         </DataTableCell>
                                     </DataTableRow>
