@@ -15,7 +15,7 @@ const fetchDataElementQuery = {
         params: {
             fields: [
                 'name', 'shortName', 'formName', 'description', 'code', 'url', 'domainType', 'valueType', 'aggregationType',
-                'categoryCombos', 'optionSets', 'zeroIsSignificant', /* any other fields you need */
+                'categoryCombos', 'optionSets', 'zeroIsSignificant',
             ],
         },
     },
@@ -34,12 +34,10 @@ const CloneElement = ({ dataElementId, onCloneComplete }) => {
         if (!loading && data) {
             const { dataElement } = data;
 
-            // Modify the data if necessary (e.g., change the name to indicate it's a clone)
             const clonedData = {
                 ...dataElement,
                 name: `${dataElement.name} (Copy)`,
                 shortName: `${dataElement.shortName} (Copy)`,
-                // Remove the ID to create a new element
                 id: undefined,
             };
 
