@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import classes from './App.module.css';
-import Form from './components/Form';
+// import Form from './components/Form';
 import Home from './Home';
 import EditElement from './components/EditElement';
 import Sidebar from './components/Sidebar';
-import DeleteElement from './components/DeleteElement';
-import GroupForm from './dataElementGroup/GroupForm';
-import EditElementGroup from './dataElementGroup/EditGroup';
+// import DeleteElement from './components/DeleteElement';
+// import GroupForm from './dataElementGroup/GroupForm';
+// import EditElementGroup from './dataElementGroup/EditGroup';
 import Overview from './dataElementGroup/GroupHome';
-import Indicator from './Indicators/indicator';
+// import Indicator from './Indicators/indicator';
 import './components/sidebar.css';
 
 const MyApp = () => {
@@ -26,6 +26,8 @@ const MyApp = () => {
                 return <Categories />;
             case '/data-elements':
                 return <Home />;
+            case '/data-elements/:id':
+                return <EditElement />;
             case '/overview':
                 return <Overview />;
             case '/data-elements/groups':
@@ -34,8 +36,8 @@ const MyApp = () => {
                 return <GroupSet />;
             case '/data-sets':
                 return <DataSets />;
-            case '/indicators':
-                return <Indicator />;
+            // case '/indicators':
+            //     return <Indicator />;
             case '/organisation-units':
                 return <OrganisationUnits />;
             case '/programs-and-tracker':
